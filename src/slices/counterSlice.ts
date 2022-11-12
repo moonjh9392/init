@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store/store';
 
 type InitialState = {
 	id: number;
@@ -19,7 +20,7 @@ const counterSlice = createSlice({
 		down: (state, action) => {
 			state.value = state.value - action.payload;
 		},
-		init: (state, action) => {
+		init: (state) => {
 			state.value = 0;
 		},
 	},
@@ -27,3 +28,4 @@ const counterSlice = createSlice({
 
 export default counterSlice.reducer;
 export const { up, down, init } = counterSlice.actions;
+export const selectValue = (state: RootState) => state.counter.value; // 9.

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/store';
-import { down, init, up } from '../slices/counterSlice';
+
+import { down, init, up, selectValue } from '../slices/counterSlice';
 import styled from 'styled-components';
 
 const MainStyle = styled.div`
@@ -12,9 +12,7 @@ const MainStyle = styled.div`
 
 const Main = () => {
 	const dispach = useDispatch();
-	const count = useSelector((state: RootState) => {
-		return state.counter.value;
-	});
+	const count = useSelector(selectValue);
 	const addNumber = () => {
 		dispach(up(1));
 	};
@@ -22,7 +20,7 @@ const Main = () => {
 		dispach(down(1));
 	};
 	const initNumber = () => {
-		dispach(init(''));
+		dispach(init());
 	};
 	return (
 		<MainStyle>
