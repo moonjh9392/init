@@ -7,7 +7,7 @@
 - axios
 - eslint
 - prettier
-- json server start
+- json server
 1. cd data
 2. json-server --watch data.json --port 3001
 
