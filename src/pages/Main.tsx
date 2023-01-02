@@ -1,90 +1,35 @@
-import styled from 'styled-components';
-import TodoList from '../components/TodoList';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { getData, postData } from '../api/api';
+import { useSelector, useDispatch } from 'react-redux';
 
-export interface Todo {
-	id?: string;
-	title: string;
-	content: string;
-	createdAt?: string;
-	updatedAt?: string;
-}
+import { down, init, up, selectValue } from '../slices/counterSlice';
+import styled from 'styled-components';
+
+const MainStyle = styled.div`
+	margin-top: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
 
 const Main = () => {
-	const [todoList, setTodoList] = useState<Array<Todo>>([]);
-	const [todo, setTodo] = useState<Todo>({ title: '', content: '' });
-
-	const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
-		const { name, value } = e.target;
-		//name과 value를 뽑아 객체에 덮어씌운다.
-		setTodo({
-			...todo,
-			[name]: value,
-		});
+	const dispach = useDispatch();
+	const count = useSelector(selectValue);
+	const addNumber = () => {
+		dispach(up(1));
 	};
-	useEffect(() => {
-		getData('http://localhost:8080/todos/').then((res) =>
-			setTodoList(res.data),
-		);
-	}, []);
-
-	/**
-	 * todo 생성
-	 */
-	const createTodo = (): void => {
-		postData('http://localhost:8080/todos/', todo);
+	const minusNumber = () => {
+		dispach(down(1));
+	};
+	const initNumber = () => {
+		dispach(init());
 	};
 	return (
 		<MainStyle>
-			<div className="background">
-				<div className="menu">
-					<form>
-						<input
-							type="text"
-							name="title"
-							onChange={onChange}
-							autoComplete="off"
-							placeholder="title"
-						/>
-						<input
-							type="text"
-							name="content"
-							onChange={onChange}
-							autoComplete="off"
-							placeholder="content"
-						/>
-						<button onClick={createTodo}>추가</button>
-					</form>
-
-					<TodoList todoList={todoList} />
-				</div>
-			</div>
+			<div>{count}</div>
+			<button onClick={addNumber}>+</button>
+			<button onClick={minusNumber}>-</button>
+			<button onClick={initNumber}>초기화</button>
 		</MainStyle>
 	);
 };
 
 export default Main;
-
-const MainStyle = styled.div`
-	.menu {
-		position: relative;
-		margin: 0 auto;
-		max-width: 718px;
-
-		@media screen and (max-width: 768px) {
-			padding: 128px 24px;
-			top: -128px;
-		}
-	}
-
-	.background {
-		background-color: whitesmoke;
-		padding-bottom: 80px;
-		padding-top: 40px;
-		height: 100vh;
-		@media screen and (min-height: 1200px) {
-			height: 100%;
-		}
-	}
-`;
