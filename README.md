@@ -11,3 +11,7 @@
 1. cd data
 2. json-server --watch data.json --port 3001
 
+git 연결 끊기
+
+git remote -v
+git remote remove origin
